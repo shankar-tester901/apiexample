@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome </title>
+</head>
+<body>
+
+    <table>
+        <thead>
+            <tr><td>Product ID</td><td>Product Name</td><td>Product Price</td></tr>
+        </thead>
+
+    <% for(let i = 0; i < result.length; i++)
+    { %>
+    <tr style='background-color:aqua'>
+                <td><%= result[i].product_id %></td>
+            <td><%= result[i].product_name %></td>
+            <td><%= result[i].product_price %></td>
+
+                <td>
+                        <div style="float:left">
+                            <a href='/api/products/<%= result[i].product_id %>'>Edit</a> &nbsp;
+                                <form method="post" action="/api/products/<%= result[i].product_id %>" style="float:right">
+                                    <input type="submit" name="delete" value='Delete' />
+                                    <input type="hidden" name="_method" value="delete"/>
+                                </form>
+                        </div>
+                 </td>
+    </tr>
+    <% } %>
+</table>
+</body>
+</html>
