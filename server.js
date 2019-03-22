@@ -7,7 +7,15 @@ const mysql = require('mysql');
 app.set('view engine', 'ejs');
 // parse application/json
 
-//The body-parser extracts the entire body portion of 
+const LoggerMiddleware = (req, res, next) => {
+  console.log(`Logged ${req.url} ${req.method} ---- ${new Date()} `)
+  next();
+}
+
+app.use(LoggerMiddleware);
+
+
+//The body-parser extracts the entire body portion of
 // an incoming request stream and makes it accessible on req.body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -19,11 +27,11 @@ var methodOverride = require('method-override')
 
 app.use(methodOverride(function (req, res)
 {
-console.log("inside methodOveride")
+//console.log("inside methodOveride")
 if (req.body && typeof req.body === 'object' && '_method' in req.body)
 {
   var method = req.body._method;
-  console.log(method);
+  //console.log(method);
   delete req.body._method;
   return method;
 }
@@ -43,7 +51,7 @@ const conn = mysql.createConnection({
 //connect to database
 conn.connect((err) =>{
   if(err) throw err;
-  console.log('Mysql Connected...');
+ // console.log('Mysql Connected...');
 });
 
 //show all products
@@ -59,13 +67,13 @@ app.get('/api/products',(req, res) => {
 //show single product
 app.get('/api/products/:id',(req, res) =>
  {
-console.log('invoked Edit ');
+//console.log('invoked Edit ');
   let sql = "SELECT * FROM product WHERE product_id="+req.params.id;
   let query = conn.query(sql, (err, results) =>
    {
     if(err) throw err;
 
-    console.log("Fetched users successfully");
+   // console.log("Fetched users successfully");
 
     // const userIs = results.map((result) => {
     //   return { abc : '123' }
@@ -95,7 +103,7 @@ app.post('/api/products',(req, res) => {
 
 //update product
 app.put('/api/products/:id',(req, res) => {
-  console.log("invoked put");
+ // console.log("invoked put");
   let sql = "UPDATE product SET product_name='"+req.body.product_name+"', product_price='"+req.body.product_price+"' WHERE product_id="+req.params.id;
   let query = conn.query(sql, (err, results) => {
     if(err) throw err;
